@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manni Trading Terminal v3</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="signal-banner" class="signal-banner hidden">
+        <i data-lucide="zap" class="pulse"></i>
+        <span id="signal-text">Lade Signale...</span>
+    </div>
+
+    <div class="glass-bg"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i data-lucide="trending-up" class="logo-icon"></i>
+                <h1>MANNI <span class="accent">TERMINAL</span> <small>v3.0</small></h1>
+            </div>
+            <div class="header-info">
+                <div class="db-info">
+                    <span id="db-size">--</span> | <span id="last-sync">--</span>
+                </div>
+                <div id="status-badge" class="badge">SYSTEM READY</div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Price Tiles (Clickable) -->
+            <section id="price-tiles" class="price-grid">
+                <div class="price-tile glass active" onclick="switchCoin('BTC')">
+                    <div class="tile-header">
+                        <i data-lucide="bitcoin"></i> <span>BTC</span>
+                    </div>
+                    <div id="price-BTC" class="tile-value">--</div>
+                </div>
+                <div class="price-tile glass" onclick="switchCoin('ETH')">
+                    <div class="tile-header">
+                        <i data-lucide="layers"></i> <span>ETH</span>
+                    </div>
+                    <div id="price-ETH" class="tile-value">--</div>
+                </div>
+                <div class="price-tile glass" onclick="switchCoin('SOL')">
+                    <div class="tile-header">
+                        <i data-lucide="sun"></i> <span>SOL</span>
+                    </div>
+                    <div id="price-SOL" class="tile-value">--</div>
+                </div>
+                <div class="price-tile glass" onclick="switchCoin('LINK')">
+                    <div class="tile-header">
+                        <i data-lucide="link"></i> <span>LINK</span>
+                    </div>
+                    <div id="price-LINK" class="tile-value">--</div>
+                </div>
+            </section>
+
+            <!-- Chart Section -->
+            <section class="chart-section glass">
+                <div class="section-header">
+                    <h3><i data-lucide="bar-chart-3"></i> <span id="chart-title">BTC/1H</span> PERFORMANCE</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Strategies Section (Lower) -->
+            <section class="strategies-container">
+                <div class="section-header">
+                    <h3><i data-lucide="shield-check"></i> AKTIVE STRATEGIEN</h3>
+                </div>
+                <div class="strategy-grid">
+                    <div class="strategy-card glass clickable" onclick="showTrades('rsi_div')">
+                        <div class="strat-header">
+                            <h4>RSI Divergence</h4>
+                            <span class="perf positive">+239.3%</span>
+                        </div>
+                        <p>Optimiert für LINK 4h. Trend-Einstieg mit RSI Bestätigung.</p>
+                        <div class="strat-footer">
+                            <span class="tag">ACTIVE</span>
+                            <span class="action">Trades ansehen →</span>
+                        </div>
+                    </div>
+                    <div class="strategy-card glass disabled">
+                        <div class="strat-header">
+                            <h4>EMA Trend Pullback</h4>
+                            <span class="perf negative">-12.5%</span>
+                        </div>
+                        <p>Pullback-Strategie auf EMA 50/200 Basis. Aktuell inaktiv.</p>
+                        <div class="strat-footer">
+                            <span class="tag">ARCHIVED</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Trade Modal (Hidden by default) -->
+        <div id="trade-modal" class="modal hidden">
+            <div class="modal-content glass">
+                <header>
+                    <h3>Trade Historie: <span id="modal-strat-name">--</span></h3>
+                    <button onclick="closeModal()"><i data-lucide="x"></i></button>
+                </header>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Coin</th>
+                                <th>Typ</th>
+                                <th>Ergebnis</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trade-list">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Manni & Jogi Collab &copy; 2026 · Parallel Tasking Enabled</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

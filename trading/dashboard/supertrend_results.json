@@ -1,0 +1,102 @@
+[
+    {
+        "coin": "BTC",
+        "interval": "1h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "BTC",
+        "interval": "4h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "ETH",
+        "interval": "1h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "ETH",
+        "interval": "4h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "SOL",
+        "interval": "1h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "SOL",
+        "interval": "4h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "LINK",
+        "interval": "1h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "LINK",
+        "interval": "4h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "DOGE",
+        "interval": "1h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    },
+    {
+        "coin": "DOGE",
+        "interval": "4h",
+        "return": 0.0,
+        "params": {
+            "length": 7,
+            "multiplier": 2.0,
+            "trades": 0
+        }
+    }
+]

@@ -1,0 +1,112 @@
+[
+    {
+        "coin": "BTC",
+        "interval": "1h",
+        "return": 15.257682834499974,
+        "params": {
+            "fast": 8,
+            "slow": 21,
+            "signal": 5,
+            "trades": 589
+        }
+    },
+    {
+        "coin": "BTC",
+        "interval": "4h",
+        "return": 30.697612489631933,
+        "params": {
+            "fast": 8,
+            "slow": 21,
+            "signal": 5,
+            "trades": 523
+        }
+    },
+    {
+        "coin": "ETH",
+        "interval": "1h",
+        "return": -11.63441921035046,
+        "params": {
+            "fast": 8,
+            "slow": 21,
+            "signal": 5,
+            "trades": 599
+        }
+    },
+    {
+        "coin": "ETH",
+        "interval": "4h",
+        "return": 155.23743622277527,
+        "params": {
+            "fast": 12,
+            "slow": 26,
+            "signal": 9,
+            "trades": 321
+        }
+    },
+    {
+        "coin": "SOL",
+        "interval": "1h",
+        "return": -47.06155083736704,
+        "params": {
+            "fast": 12,
+            "slow": 26,
+            "signal": 9,
+            "trades": 398
+        }
+    },
+    {
+        "coin": "SOL",
+        "interval": "4h",
+        "return": -0.9588081718886315,
+        "params": {
+            "fast": 8,
+            "slow": 21,
+            "signal": 5,
+            "trades": 513
+        }
+    },
+    {
+        "coin": "LINK",
+        "interval": "1h",
+        "return": -49.65322940800832,
+        "params": {
+            "fast": 8,
+            "slow": 21,
+            "signal": 5,
+            "trades": 599
+        }
+    },
+    {
+        "coin": "LINK",
+        "interval": "4h",
+        "return": 12.284959018706171,
+        "params": {
+            "fast": 12,
+            "slow": 26,
+            "signal": 9,
+            "trades": 347
+        }
+    },
+    {
+        "coin": "DOGE",
+        "interval": "1h",
+        "return": -10.39030633533822,
+        "params": {
+            "fast": 8,
+            "slow": 21,
+            "signal": 5,
+            "trades": 572
+        }
+    },
+    {
+        "coin": "DOGE",
+        "interval": "4h",
+        "return": 574.7793224907443,
+        "params": {
+            "fast": 8,
+            "slow": 21,
+            "signal": 5,
+            "trades": 485
+        }
+    }
+]

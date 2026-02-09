@@ -33,6 +33,28 @@ async function updateDashboard() {
             banner.classList.add('hidden');
         }
 
+        // Update Strategies
+        const stratList = document.getElementById('strategy-list');
+        stratList.innerHTML = '';
+        data.strategies.forEach(strat => {
+            const card = document.createElement('div');
+            card.className = `strategy-card glass ${strat.status === 'active' ? 'clickable' : 'disabled'}`;
+            if (strat.status === 'active') card.onclick = () => showTrades(strat.id);
+            
+            card.innerHTML = `
+                <div class="strat-header">
+                    <h4>${strat.name}</h4>
+                    <span class="perf ${strat.performance.startsWith('+') ? 'positive' : 'negative'}">${strat.performance}</span>
+                </div>
+                <p>${strat.desc}</p>
+                <div class="strat-footer">
+                    <span class="tag ${strat.status}">${strat.status.toUpperCase()}</span>
+                    ${strat.status === 'active' ? '<span class="action">Trades ansehen →</span>' : ''}
+                </div>
+            `;
+            stratList.appendChild(card);
+        });
+
         // Render Current Chart
         renderChart(currentCoin);
         

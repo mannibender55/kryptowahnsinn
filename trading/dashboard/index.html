@@ -77,28 +77,8 @@
                 <div class="section-header">
                     <h3><i data-lucide="shield-check"></i> AKTIVE STRATEGIEN</h3>
                 </div>
-                <div class="strategy-grid">
-                    <div class="strategy-card glass clickable" onclick="showTrades('rsi_div')">
-                        <div class="strat-header">
-                            <h4>RSI Divergence</h4>
-                            <span class="perf positive">+239.3%</span>
-                        </div>
-                        <p>Optimiert für LINK 4h. Trend-Einstieg mit RSI Bestätigung.</p>
-                        <div class="strat-footer">
-                            <span class="tag">ACTIVE</span>
-                            <span class="action">Trades ansehen →</span>
-                        </div>
-                    </div>
-                    <div class="strategy-card glass disabled">
-                        <div class="strat-header">
-                            <h4>EMA Trend Pullback</h4>
-                            <span class="perf negative">-12.5%</span>
-                        </div>
-                        <p>Pullback-Strategie auf EMA 50/200 Basis. Aktuell inaktiv.</p>
-                        <div class="strat-footer">
-                            <span class="tag">ARCHIVED</span>
-                        </div>
-                    </div>
+                <div id="strategy-list" class="strategy-grid">
+                    <!-- Populated by JS -->
                 </div>
             </section>
         </main>

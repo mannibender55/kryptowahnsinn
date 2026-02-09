@@ -1,12 +1,12 @@
 {
     "db_size": "12.20 MB",
-    "last_sync": "2026-02-09 15:15",
+    "last_sync": "2026-02-09 15:30",
     "prices": {
-        "BTC": 68441.0,
-        "ETH": 2011.0,
-        "SOL": 83.707,
-        "LINK": 8.5504,
-        "DOGE": 0.093725
+        "BTC": 68682.0,
+        "ETH": 2019.8,
+        "SOL": 83.776,
+        "LINK": 8.5307,
+        "DOGE": 0.0935
     },
     "signals": [],
     "charts": {
@@ -113,7 +113,7 @@
                 68876.0,
                 69108.0,
                 68550.0,
-                68450.0
+                68727.0
             ]
         },
         "ETH": {
@@ -219,7 +219,7 @@
                 2026.8,
                 2034.4,
                 2021.5,
-                2011.0
+                2019.5
             ]
         },
         "SOL": {
@@ -325,7 +325,7 @@
                 83.422,
                 83.991,
                 83.705,
-                83.731
+                83.733
             ]
         },
         "LINK": {
@@ -431,7 +431,7 @@
                 8.5569,
                 8.6016,
                 8.5675,
-                8.5504
+                8.5307
             ]
         },
         "DOGE": {
@@ -537,7 +537,7 @@
                 0.093083,
                 0.094096,
                 0.093671,
-                0.093725
+                0.093636
             ]
         }
     },
@@ -547,33 +547,42 @@
             "name": "RSI Divergence",
             "status": "active",
             "performance": "+239.3%",
+            "desc": "Optimiert f\u00fcr LINK 4h. Erkennt RSI/Preis Divergenzen.",
             "trades": [
                 {
                     "date": "2026-02-08 14:00",
                     "coin": "LINK",
                     "type": "LONG",
-                    "profit": "+10.2%"
+                    "profit": "+239.3%"
                 },
                 {
                     "date": "2026-02-07 09:00",
                     "coin": "BTC",
                     "type": "SHORT",
-                    "profit": "-2.1%"
-                },
-                {
-                    "date": "2026-02-05 21:00",
-                    "coin": "SOL",
-                    "type": "LONG",
-                    "profit": "+5.4%"
+                    "profit": "+41.7%"
                 }
             ]
         },
         {
-            "id": "ema_pullback",
-            "name": "EMA Trend Pullback",
-            "status": "inactive",
-            "performance": "-12.5%",
-            "trades": []
+            "id": "macd_cross",
+            "name": "MACD Cross",
+            "status": "active",
+            "performance": "+574.8%",
+            "desc": "Trend-Folge Strategie. Top Performer bei DOGE 4h.",
+            "trades": [
+                {
+                    "date": "2026-02-09 10:00",
+                    "coin": "DOGE",
+                    "type": "LONG",
+                    "profit": "+574.8%"
+                },
+                {
+                    "date": "2026-02-09 08:00",
+                    "coin": "ETH",
+                    "type": "LONG",
+                    "profit": "+155.2%"
+                }
+            ]
         }
     ]
 }

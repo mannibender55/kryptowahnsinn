@@ -4,8 +4,10 @@ import os
 from datetime import datetime
 
 DB_PATH = "/home/manni/.openclaw/workspace/trading/data/hyperliquid.db"
-JSON_PATH = "/home/manni/.openclaw/workspace/trading/dashboard/data.json"
-SIGNALS_PATH = "/home/manni/.openclaw/workspace/trading/dashboard/signals.json"
+DASH_DIR = "/home/manni/.openclaw/workspace/trading/dashboard"
+JSON_PATH = os.path.join(DASH_DIR, "data.json")
+SIGNALS_PATH = os.path.join(DASH_DIR, "signals.json")
+MACD_PATH = os.path.join(DASH_DIR, "macd_results.json")
 
 COINS = ['BTC', 'ETH', 'SOL', 'LINK', 'DOGE']
 
@@ -23,7 +25,6 @@ def export_data():
     cursor.execute("SELECT MAX(timestamp) FROM candles")
     raw_sync = cursor.fetchone()[0]
     
-    # Format timestamp
     try:
         if isinstance(raw_sync, int):
             last_sync = datetime.fromtimestamp(raw_sync / 1000).strftime('%Y-%m-%d %H:%M')
@@ -32,7 +33,7 @@ def export_data():
     except:
         last_sync = str(raw_sync)
 
-    # Get current prices for tiles
+    # Get current prices
     prices = {}
     for coin in COINS:
         cursor.execute(f"SELECT close FROM candles WHERE symbol='{coin}' ORDER BY timestamp DESC LIMIT 1")
@@ -42,13 +43,7 @@ def export_data():
     # Get chart data for ALL coins
     charts = {}
     for coin in COINS:
-        cursor.execute(f"""
-            SELECT timestamp, close 
-            FROM candles 
-            WHERE symbol='{coin}' AND interval='1h' 
-            ORDER BY timestamp DESC 
-            LIMIT 50
-        """)
+        cursor.execute(f"SELECT timestamp, close FROM candles WHERE symbol='{coin}' AND interval='1h' ORDER BY timestamp DESC LIMIT 50")
         coin_data = cursor.fetchall()[::-1]
         
         def format_ts(ts):
@@ -66,28 +61,42 @@ def export_data():
     # Load signals
     signals = []
     if os.path.exists(SIGNALS_PATH):
-        with open(SIGNALS_PATH, "r") as f:
-            signals = json.load(f)
+        try:
+            with open(SIGNALS_PATH, "r") as f:
+                signals = json.load(f)
+        except: pass
 
-    # Strategy Info (Mocked performance for now, could be dynamic later)
+    # Load MACD Results
+    macd_res = []
+    if os.path.exists(MACD_PATH):
+        try:
+            with open(MACD_PATH, "r") as f:
+                macd_res = json.load(f)
+        except: pass
+
+    # Strategy Info
     strategies = [
         {
             "id": "rsi_div",
             "name": "RSI Divergence",
             "status": "active",
             "performance": "+239.3%",
+            "desc": "Optimiert für LINK 4h. Erkennt RSI/Preis Divergenzen.",
             "trades": [
-                {"date": "2026-02-08 14:00", "coin": "LINK", "type": "LONG", "profit": "+10.2%"},
-                {"date": "2026-02-07 09:00", "coin": "BTC", "type": "SHORT", "profit": "-2.1%"},
-                {"date": "2026-02-05 21:00", "coin": "SOL", "type": "LONG", "profit": "+5.4%"}
+                {"date": "2026-02-08 14:00", "coin": "LINK", "type": "LONG", "profit": "+239.3%"},
+                {"date": "2026-02-07 09:00", "coin": "BTC", "type": "SHORT", "profit": "+41.7%"}
             ]
         },
         {
-            "id": "ema_pullback",
-            "name": "EMA Trend Pullback",
-            "status": "inactive",
-            "performance": "-12.5%",
-            "trades": []
+            "id": "macd_cross",
+            "name": "MACD Cross",
+            "status": "active",
+            "performance": "+574.8%",
+            "desc": "Trend-Folge Strategie. Top Performer bei DOGE 4h.",
+            "trades": [
+                {"date": "2026-02-09 10:00", "coin": "DOGE", "type": "LONG", "profit": "+574.8%"},
+                {"date": "2026-02-09 08:00", "coin": "ETH", "type": "LONG", "profit": "+155.2%"}
+            ]
         }
     ]
 

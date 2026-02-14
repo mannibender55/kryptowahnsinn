@@ -58,13 +58,21 @@ def export_data():
             "values": [d[1] for d in coin_data]
         }
 
-    # Load signals
+    # Get signals directly from database
     signals = []
-    if os.path.exists(SIGNALS_PATH):
-        try:
-            with open(SIGNALS_PATH, "r") as f:
-                signals = json.load(f)
-        except: pass
+    cursor.execute("SELECT id, timestamp, symbol, signal, entry_price, sl_price, tp_price, status, profit_loss FROM signals ORDER BY timestamp DESC")
+    for row in cursor.fetchall():
+        signals.append({
+            "id": row[0],
+            "date": row[1],
+            "symbol": row[2],
+            "signal": row[3],
+            "entry": row[4],
+            "sl": row[5],
+            "tp": row[6],
+            "status": row[7],
+            "profit_loss": row[8]
+        })
 
     # Load MACD Results
     macd_res = []
@@ -75,30 +83,65 @@ def export_data():
         except: pass
 
     # Strategy Info
-    strategies = [
-        {
-            "id": "rsi_div",
-            "name": "RSI Divergence",
-            "status": "active",
-            "performance": "+239.3%",
-            "desc": "Optimiert für LINK 4h. Erkennt RSI/Preis Divergenzen.",
-            "trades": [
-                {"date": "2026-02-08 14:00", "coin": "LINK", "type": "LONG", "profit": "+239.3%"},
-                {"date": "2026-02-07 09:00", "coin": "BTC", "type": "SHORT", "profit": "+41.7%"}
-            ]
-        },
-        {
-            "id": "macd_cross",
-            "name": "MACD Cross",
-            "status": "active",
-            "performance": "+574.8%",
-            "desc": "Trend-Folge Strategie. Top Performer bei DOGE 4h.",
-            "trades": [
-                {"date": "2026-02-09 10:00", "coin": "DOGE", "type": "LONG", "profit": "+574.8%"},
-                {"date": "2026-02-09 08:00", "coin": "ETH", "type": "LONG", "profit": "+155.2%"}
-            ]
-        }
-    ]
+    strategies = []
+    
+    # 1. RSI Divergence
+    rsi_trades = []
+    # Load from BTC 1h or LINK 4h
+    for coin in ['LINK', 'BTC']:
+        path = os.path.join(DASH_DIR, f"trades_rsi_{coin}.json")
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                raw_trades = json.load(f)
+                # Only take the CLOSE trades for the performance table
+                for t in raw_trades:
+                    if t['type'] == 'CLOSE' or t['type'] == 'EXIT_LONG' or t['type'] == 'EXIT_SHORT':
+                        rsi_trades.append({
+                            "date": t['date'],
+                            "coin": coin,
+                            "type": t.get('side', t['type']),
+                            "profit": f"{t['profit']:.2f}$",
+                            "entry": f"{t.get('entry', 0):.2f}",
+                            "sl": f"{t.get('sl', 0):.2f}",
+                            "tp": f"{t.get('tp', 0):.2f}"
+                        })
+
+    strategies.append({
+        "id": "rsi_div",
+        "name": "RSI Divergence",
+        "status": "active",
+        "performance": "+239.3%",
+        "desc": "Optimiert für LINK 4h. Erkennt RSI/Preis Divergenzen.",
+        "trades": rsi_trades[::-1][:20] # Last 20 trades
+    })
+
+    # 2. MACD Cross
+    macd_trades = []
+    for coin in ['DOGE', 'ETH', 'BTC']:
+        path = os.path.join(DASH_DIR, f"trades_macd_{coin}.json")
+        if os.path.exists(path):
+            with open(path, "r") as f:
+                raw_trades = json.load(f)
+                for t in raw_trades:
+                    if 'EXIT' in t['type']:
+                        macd_trades.append({
+                            "date": t['date'],
+                            "coin": coin,
+                            "type": t['type'].replace('EXIT_', ''),
+                            "profit": f"{t['profit']:.2f}$",
+                            "entry": f"{t['entry']:.2f}",
+                            "sl": f"{t['sl']:.2f}",
+                            "tp": f"{t['tp']:.2f}"
+                        })
+
+    strategies.append({
+        "id": "macd_cross",
+        "name": "MACD Cross",
+        "status": "active",
+        "performance": "+574.8%",
+        "desc": "Trend-Folge Strategie. Top Performer bei DOGE 4h.",
+        "trades": macd_trades[::-1][:20]
+    })
 
     data = {
         "db_size": f"{db_size:.2f} MB",

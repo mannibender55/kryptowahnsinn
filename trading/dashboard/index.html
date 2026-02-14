@@ -8,12 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@3/dist/iconify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="signal-banner" class="signal-banner hidden">
-        <i data-lucide="zap" class="pulse"></i>
+        <i class="iconify pulse" data-icon="ant-design:thunderbolt-outlined"></i>
         <span id="signal-text">Lade Signale...</span>
     </div>
 
@@ -21,61 +21,71 @@
     
     <div class="container">
         <header>
-            <div class="logo">
-                <i data-lucide="trending-up" class="logo-icon"></i>
-                <h1>MANNI <span class="accent">TERMINAL</span> <small>v3.0</small></h1>
+            <div class="header-meta">
+                <span id="db-size">--</span> | <span id="last-sync">--</span>
             </div>
-            <div class="header-info">
-                <div class="db-info">
-                    <span id="db-size">--</span> | <span id="last-sync">--</span>
+            <div class="header-bar">
+                <div class="logo">
+                    <i class="iconify logo-icon" data-icon="ant-design:rise-outlined"></i>
+                    <h1>Kryptowahnsinn</h1>
                 </div>
                 <div id="status-badge" class="badge">SYSTEM READY</div>
             </div>
         </header>
 
-        <main>
-            <!-- Price Tiles (Clickable) -->
+        <main class="dashboard-grid">
+            <!-- Price Tiles -->
             <section id="price-tiles" class="price-grid">
                 <div class="price-tile glass active" onclick="switchCoin('BTC')">
                     <div class="tile-header">
-                        <i data-lucide="bitcoin"></i> <span>BTC</span>
+                        <i class="iconify" data-icon="ant-design:bank-outlined"></i> <span>BTC</span>
                     </div>
                     <div id="price-BTC" class="tile-value">--</div>
                 </div>
                 <div class="price-tile glass" onclick="switchCoin('ETH')">
                     <div class="tile-header">
-                        <i data-lucide="layers"></i> <span>ETH</span>
+                        <i class="iconify" data-icon="ant-design:appstore-outlined"></i> <span>ETH</span>
                     </div>
                     <div id="price-ETH" class="tile-value">--</div>
                 </div>
                 <div class="price-tile glass" onclick="switchCoin('SOL')">
                     <div class="tile-header">
-                        <i data-lucide="sun"></i> <span>SOL</span>
+                        <i class="iconify" data-icon="ant-design:bulb-outlined"></i> <span>SOL</span>
                     </div>
                     <div id="price-SOL" class="tile-value">--</div>
                 </div>
                 <div class="price-tile glass" onclick="switchCoin('LINK')">
                     <div class="tile-header">
-                        <i data-lucide="link"></i> <span>LINK</span>
+                        <i class="iconify" data-icon="ant-design:link-outlined"></i> <span>LINK</span>
                     </div>
                     <div id="price-LINK" class="tile-value">--</div>
                 </div>
             </section>
 
-            <!-- Chart Section -->
+            <!-- Chart Section (Left) -->
             <section class="chart-section glass">
                 <div class="section-header">
-                    <h3><i data-lucide="bar-chart-3"></i> <span id="chart-title">BTC/1H</span> PERFORMANCE</h3>
+                    <h3><i class="iconify" data-icon="ant-design:bar-chart-outlined"></i> <span id="chart-title">BTC/1H</span> PERFORMANCE</h3>
                 </div>
                 <div class="chart-container">
                     <canvas id="priceChart"></canvas>
                 </div>
             </section>
 
+            <!-- Active Trades Panel (Right) -->
+            <section class="trades-panel glass">
+                <div class="section-header">
+                    <h3><i class="iconify" data-icon="ant-design:shop-outlined"></i> TRADES</h3>
+                </div>
+                <div id="active-trades" class="trades-list">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
             <!-- Strategies Section (Lower) -->
             <section class="strategies-container">
                 <div class="section-header">
-                    <h3><i data-lucide="shield-check"></i> AKTIVE STRATEGIEN</h3>
+                    <h3><i class="iconify" data-icon="ant-design:safety-certificate-outlined"></i> AKTIVE STRATEGIEN</h3>
                 </div>
                 <div id="strategy-list" class="strategy-grid">
                     <!-- Populated by JS -->
@@ -88,7 +98,7 @@
             <div class="modal-content glass">
                 <header>
                     <h3>Trade Historie: <span id="modal-strat-name">--</span></h3>
-                    <button onclick="closeModal()"><i data-lucide="x"></i></button>
+                    <button onclick="closeModal()"><i class="iconify" data-icon="ant-design:close-outlined"></i></button>
                 </header>
                 <div class="table-container">
                     <table>

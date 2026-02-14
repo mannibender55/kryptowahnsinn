@@ -1,6 +1,71 @@
 let cachedData = null;
 let currentCoin = 'BTC';
 
+function updateActiveTrades(data) {
+    const container = document.getElementById('active-trades');
+    
+    const signals = data.signals || [];
+    const prices = data.prices || {};
+    const strategies = data.strategies || [];
+    const BUYIN = 100; // $100 per trade
+    
+    if (signals.length === 0) {
+        container.innerHTML = '<div class="no-trades">Keine Trades</div>';
+        return;
+    }
+
+    // Sort by date descending (newest first)
+    signals.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    container.innerHTML = signals.map(sig => {
+        const isOpen = sig.status === 'ACTIVE';
+        const currentPrice = prices[sig.symbol] || 0;
+        const entryPrice = sig.entry || 0;
+        const diff = currentPrice - entryPrice;
+        
+        // Calculate P/L with $100 buyin
+        const positionSize = BUYIN / entryPrice; // how many coins
+        const profitDollar = positionSize * diff;
+        const pct = entryPrice > 0 ? ((diff / entryPrice) * 100) : 0;
+        const isProfit = diff >= 0;
+        
+        // Format date
+        const tradeDate = sig.date ? new Date(sig.date).toLocaleDateString('de-DE') : '-';
+        
+        return `
+            <div class="trade-card ${isOpen ? (isProfit ? 'profit' : 'loss') : (isProfit ? 'profit-closed' : 'loss-closed')}">
+                <div class="trade-header">
+                    <span class="trade-symbol">${sig.symbol}</span>
+                    <span class="trade-type ${sig.signal.toLowerCase()}">${sig.signal}${!isOpen ? ' ✕' : ''}</span>
+                </div>
+                <div class="trade-date">📅 ${tradeDate}</div>
+                <div class="trade-prices">
+                    <div class="trade-row">
+                        <span>Entry</span>
+                        <span class="mono">$${entryPrice.toLocaleString()}</span>
+                    </div>
+                    ${isOpen ? `
+                    <div class="trade-row">
+                        <span>Jetzt</span>
+                        <span class="mono">$${currentPrice.toLocaleString()}</span>
+                    </div>
+                    ` : ''}
+                    <div class="trade-row">
+                        <span>P/L (${BUYIN}$)</span>
+                        <span class="mono ${isProfit ? 'green' : 'red'}">
+                            ${isProfit ? '+' : ''}${profitDollar.toFixed(2)}$ (${isProfit ? '+' : ''}${pct.toFixed(2)}%)
+                        </span>
+                    </div>
+                </div>
+                <div class="trade-sl-tp">
+                    <span>SL: $${(sig.sl || 0).toLocaleString()}</span>
+                    <span>TP: $${(sig.tp || 0).toLocaleString()}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
 async function updateDashboard() {
     try {
         const response = await fetch('data.json');
@@ -20,15 +85,31 @@ async function updateDashboard() {
             }
         }
 
-        // Update Signal Banner
+        // Update Active Trades Panel
+        updateActiveTrades(data);
+
+        // Update Signal Banner - Today's Trades
         const banner = document.getElementById('signal-banner');
         const bannerText = document.getElementById('signal-text');
-        const activeSignals = data.signals.filter(s => s.type !== 'STATUS');
         
-        if (activeSignals.length > 0) {
+        // Filter today's trades
+        const today = new Date().toISOString().split('T')[0];
+        const todaySignals = data.signals.filter(s => s.date && s.date.startsWith(today));
+        
+        if (todaySignals.length > 0) {
             banner.classList.remove('hidden');
-            const s = activeSignals[0];
-            bannerText.innerText = `SIGNAL: ${s.symbol} ${s.signal} @ ${s.price} (${s.timeframe})`;
+            
+            if (todaySignals.length === 1) {
+                // Single trade - show normally
+                const s = todaySignals[0];
+                bannerText.innerHTML = `<span class="banner-trade"><span class="iconify" data-icon="ant-design:stock-outlined"></span> ${s.symbol} ${s.signal} @ $${s.entry?.toLocaleString()}</span>`;
+            } else {
+                // Multiple trades - show as marquee
+                const tradesHtml = todaySignals.map(s => 
+                    `<span class="banner-trade"><span class="iconify" data-icon="ant-design:stock-outlined"></span> ${s.symbol} ${s.signal} @ $${s.entry?.toLocaleString()}</span>`
+                ).join('<span class="banner-sep">•••</span>');
+                bannerText.innerHTML = `<div class="banner-marquee"><div class="banner-marquee-inner">${tradesHtml}${tradesHtml}</div></div>`;
+            }
         } else {
             banner.classList.add('hidden');
         }
@@ -57,8 +138,6 @@ async function updateDashboard() {
 
         // Render Current Chart
         renderChart(currentCoin);
-        
-        if (window.lucide) lucide.createIcons();
 
     } catch (e) {
         console.error("Dashboard update failed", e);
@@ -139,6 +218,11 @@ function showTrades(stratId) {
 function closeModal() {
     document.getElementById('trade-modal').classList.add('hidden');
 }
+
+// Close modal when clicking outside
+document.getElementById('trade-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
 
 // Initial load
 updateDashboard();
